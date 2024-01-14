@@ -219,8 +219,6 @@ START_TEST(test_s21_eq_matrix7) {
   s21_create_matrix(rows + 1, columns + 1, &matrix_test_2);
   s21_fill_matrix(&matrix_test_1, src_1);
   s21_fill_matrix(&matrix_test_2, src_2);
-  s21_print_matrix(&matrix_test_1);
-  s21_print_matrix(&matrix_test_2);
   ck_assert_int_eq(s21_eq_matrix(&matrix_test_1, &matrix_test_2), FAILURE);
   s21_remove_matrix(&matrix_test_1);
   s21_remove_matrix(&matrix_test_2);
@@ -248,9 +246,55 @@ Suite *eq_matrix() {
   return result;
 }
 
+START_TEST(test_s21_sum_matrix) {
+  matrix_t matrix_test_1;
+  matrix_t matrix_test_2;
+  matrix_t expect_result;
+  matrix_t result;
+  int rows = 3, columns = 3;
+  char *src_1 = "1 2 3 4 5 6 7 8 9";
+  char *src_2 = "9 8 7 6 5 4 3 2 1";
+  char *src_res = "10 10 10 10 10 10 10 10 10";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_create_matrix(rows, columns, &matrix_test_2);
+  s21_create_matrix(rows, columns, &expect_result);
+  s21_create_matrix(rows, columns, &result);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  s21_fill_matrix(&matrix_test_2, src_2);
+  s21_fill_matrix(&expect_result, src_res);
+  s21_sum_matrix(&matrix_test_1, &matrix_test_2, &result);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
+  s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&matrix_test_2);
+  s21_remove_matrix(&expect_result);
+  s21_remove_matrix(&result);
+}
+END_TEST
+
+Suite *sum_matrix() {
+  Suite *result;
+  TCase *tc_s21_matrix;
+
+  result = suite_create("s21_matrix");
+  tc_s21_matrix = tcase_create("s21_matrix");
+
+  tcase_add_test(tc_s21_matrix, test_s21_sum_matrix);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix1);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix2);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix3);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix4);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix5);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix6);
+  // tcase_add_test(tc_s21_matrix, test_s21_eq_matrix7);
+
+  suite_add_tcase(result, tc_s21_matrix);
+
+  return result;
+}
+
 int main() {
   int failed = 0;
-  Suite *result[] = {create_matrix(), eq_matrix(), NULL};
+  Suite *result[] = {create_matrix(), eq_matrix(), sum_matrix(), NULL};
 
   for (int i = 0; result[i] != NULL; i++) {
     SRunner *runner = srunner_create(result[i]);

@@ -76,7 +76,8 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   if (s21_this_is_null(A) || s21_row_or_col_err(A) || s21_this_is_null(B) ||
       s21_row_or_col_err(B) || s21_this_is_null(result) ||
-      s21_row_or_col_err(result))
+      s21_row_or_col_err(result) || s21_not_same_size(A, B) ||
+      s21_not_same_size(A, result))
     return INCORRECT_MATRIX;
   if ((A->rows != B->rows) || (A->columns != B->columns))
     return CALCULATION_ERROR;
