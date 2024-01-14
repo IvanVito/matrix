@@ -1,18 +1,23 @@
 #include "s21_matrix.h"
 
 // int main() {
-//   matrix_t matrix;
-//   s21_create_matrix(-1, 1, &matrix);
-//   s21_fill_matrix(&matrix);
-//   s21_print_matrix(&matrix);
-//   s21_remove_matrix(&matrix);
-
+//   matrix_t matrix_test_1;
+//   matrix_t matrix_test_2;
+//   int rows = 2, columns = 2;
+//   char *src_1 = "1.1111111 2.2222222 3.3333333 4.4444444";
+//   char *src_2 = "1.1111111 2.2222222 3.3333333 4.4444444";
+//   s21_create_matrix(rows, columns, &matrix_test_1);
+//   s21_create_matrix(rows + 1, columns + 1, &matrix_test_2);
+//   s21_fill_matrix(&matrix_test_1, src_1);
+//   s21_fill_matrix(&matrix_test_2, src_2);
+//   s21_eq_matrix(&matrix_test_1, &matrix_test_2);
+//   s21_remove_matrix(&matrix_test_1);
+//   s21_remove_matrix(&matrix_test_2);
 //   return 0;
 // }
 
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
-  if (result == NULL || result->matrix == NULL || rows < 1 || columns < 1)
-    return INCORRECT_MATRIX;
+  if (result == NULL || rows < 1 || columns < 1) return INCORRECT_MATRIX;
   int res = OK;
   result->matrix = calloc(rows, sizeof(double *));
   if (result->matrix != NULL) {
@@ -37,10 +42,11 @@ void s21_remove_matrix(matrix_t *A) {
   }
 }
 
-void s21_fill_matrix(matrix_t *A) {
+void s21_fill_matrix(matrix_t *A, char *src) {
   for (int row = 0; row < A->rows; row++) {
     for (int column = 0; column < A->columns; column++) {
-      scanf("%lf", &(A->matrix[row][column]));
+      sscanf(src, "%lf ", &(A->matrix[row][column]));
+      src += strcspn(src, " ") + 1;
     }
   }
 }
@@ -56,7 +62,7 @@ void s21_print_matrix(matrix_t *A) {
 
 int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   if (s21_this_is_null(A) || s21_row_or_col_err(A) || s21_this_is_null(B) ||
-      s21_this_is_null(B))
+      s21_this_is_null(B) || s21_not_same_size(A, B))
     return FAILURE;
   int res = SUCCESS;
   for (int row = 0; row < A->rows; row++) {
@@ -130,7 +136,7 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
 
 int s21_this_is_null(matrix_t *A) {
   int res = OK;
-  if (A == NULL || A->matrix == NULL || A->rows < 1 || A->columns < 1) {
+  if ((A == NULL) || (A->matrix == NULL)) {
     res = INCORRECT_MATRIX;
   } else {
     for (int row = 0; row < A->rows; row++) {
@@ -142,7 +148,15 @@ int s21_this_is_null(matrix_t *A) {
 
 int s21_row_or_col_err(matrix_t *A) {
   int res = OK;
-  if (A == NULL || A->matrix == NULL || A->rows < 1 || A->columns < 1)
+  if ((A != NULL) || (A->matrix != NULL)) {
+    if (A->rows < 1 || A->columns < 1) res = INCORRECT_MATRIX;
+  } else {
     res = INCORRECT_MATRIX;
+  }
   return res;
+}
+
+int s21_not_same_size(matrix_t *A, matrix_t *B) {
+  if (A->rows != B->rows || A->columns != B->columns) return INCORRECT_MATRIX;
+  return OK;
 }

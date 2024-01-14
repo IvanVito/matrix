@@ -27,9 +27,10 @@ int s21_transpose(matrix_t *A, matrix_t *result);
 int s21_calc_complements(matrix_t *A, matrix_t *result);
 int s21_determinant(matrix_t *A, double *result);
 int s21_inverse_matrix(matrix_t *A, matrix_t *result);
-void s21_fill_matrix(matrix_t *A);
+void s21_fill_matrix(matrix_t *A, char *src);
 void s21_print_matrix(matrix_t *A);
 int s21_this_is_null(matrix_t *A);
 int s21_row_or_col_err(matrix_t *A);
+int s21_not_same_size(matrix_t *A, matrix_t *B);
 
 #endif
