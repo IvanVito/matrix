@@ -3,7 +3,7 @@ CFLAGS = -Wall -Werror -Wextra -std=c11
 OS = $(shell uname)
 
 ifeq ($(OS),Linux)
-    det_OS = -lcheck -lrt -lpthread -lsubunit
+    det_OS = -lcheck -lrt -lpthread -lsubunit -lm
 else
     det_OS = -lcheck -lpthread
 endif
