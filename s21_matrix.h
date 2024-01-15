@@ -2,6 +2,7 @@
 #define _S21_MATRIX
 #define SUCCESS 1
 #define FAILURE 0
+#define ACCURACY 0.00000001L
 #include <check.h>
 #include <math.h>
 #include <stdio.h>
