@@ -1,18 +1,18 @@
 #include "s21_matrix.h"
 
-int main() {
-  matrix_t A;
-  double result = 0;
-  s21_determinant(&A, &result);
-  int rows = 3, columns = 3;
-  char *src_1 = "1 2 3 4 5 6 7 8 9";
-  s21_create_matrix(rows, columns, &A);
-  s21_fill_matrix(&A, src_1);
-  s21_determinant(&A, &result);
-  printf("%f", result);
-  s21_remove_matrix(&A);
-  return 0;
-}
+// int main() {
+//   matrix_t A;
+//   double result = 0;
+//   int rows = 3, columns = 3;
+//   char *src_1 = "1.22 9.12 4.71 2.01 0.001 5.1 3.5 7.1 6.8";
+//   s21_create_matrix(rows, columns, &A);
+//   s21_fill_matrix(&A, src_1);
+//   s21_determinant(&A, &result);
+//   s21_print_matrix(&A);
+//   printf("%f", result);
+//   s21_remove_matrix(&A);
+//   return 0;
+// }
 
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
   if (result == NULL || rows < 1 || columns < 1) return INCORRECT_MATRIX;
@@ -111,8 +111,8 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
 }
 
 int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
-  if (s21_is_inf_or_nan(A) || s21_is_inf_or_nan(B)) return CALCULATION_ERROR;
-  if (A->columns != B->rows) return INCORRECT_MATRIX;
+  if (s21_is_inf_or_nan(A) || s21_is_inf_or_nan(B) || A->columns != B->rows)
+    return CALCULATION_ERROR;
   s21_create_matrix(A->rows, B->columns, result);
   for (int row = 0; row < A->rows; row++) {
     for (int column = 0; column < B->columns; column++) {
@@ -135,44 +135,75 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
 }
 
 int s21_determinant(matrix_t *A, double *result) {
-  matrix_t B;
   if (A->rows != A->columns) return CALCULATION_ERROR;
-  int count = A->rows, sum = 0;
-  while (count != 3) {
-    count--;
-    for (int size = 0; size < count; size++) {
-      s21_create_matrix(count, count, &B);
-      s21_determinant_copy(A, &B);
-      *result +=
-          pow(-1, size + 2) * A->matrix[0][size] * s21_determinant(&B, result);
+  matrix_t copy_matrix = *A;
+  *result = 1;
+  int ind_not_null = s21_search_not_null(&copy_matrix, 0);
+  for (int count = 0; (count < (copy_matrix.rows - 1)) && *result != 0;
+       count++) {
+    if (ind_not_null >= 0) {
+      s21_gaus_str(&copy_matrix, ind_not_null, count);
+      ind_not_null = s21_search_not_null(&copy_matrix, count + 1);
+    } else {
+      *result = 0;
     }
   }
-  *result += s21_determinant_3(A);
+  for (int column = 0; column < copy_matrix.columns; column++)
+    *result *= copy_matrix.matrix[column][column];
   return OK;
 }
 
-void s21_determinant_copy(matrix_t *A, matrix_t *B) {
-  for (int row = 1; row < A->rows; row++) {
-    for (int column = 1; column < A->columns; column++) {
-      B->matrix[row][column] = A->matrix[row][column];
+int s21_search_not_null(matrix_t *copy_matrix, int count) {
+  int not_null = -1;
+  for (int row = count; (row < copy_matrix->rows) && (not_null < 0); row++)
+    if (copy_matrix->matrix[row][count]) not_null = row;
+  return not_null;
+}
+
+void s21_gaus_str(matrix_t *copy_matrix, int not_null, int count) {
+  for (int row = count; row < not_null; row++) {
+    double divider =
+        copy_matrix->matrix[row][count] / copy_matrix->matrix[not_null][count];
+    for (int column = count; column < copy_matrix->columns; column++) {
+      copy_matrix->matrix[row][column] -=
+          copy_matrix->matrix[not_null][column] * divider;
+    }
+  }
+  for (int row = not_null + 1; row < copy_matrix->rows; row++) {
+    double divider =
+        copy_matrix->matrix[row][count] / copy_matrix->matrix[not_null][count];
+    for (int column = count; column < copy_matrix->columns; column++) {
+      copy_matrix->matrix[row][column] -=
+          copy_matrix->matrix[not_null][column] * divider;
     }
   }
 }
 
-int s21_determinant_3(matrix_t *A) {
-  int determinant = 0;
-  s21_print_matrix(A);
-  for (int size = 0; size < 3; size++) {
-    determinant +=
-        pow(-1, size + 2) * A->matrix[0][size] *
-        (A->matrix[1][1 - (size / 2)] * A->matrix[2][2 - (size / 2)] -
-         A->matrix[2][1 - (size / 2)] * A->matrix[1][2 - (size / 2)]);
-  }
-  return determinant;
-}
-
 // int s21_calc_complements(matrix_t *A, matrix_t *result) {
-//    return;
+//   double res = 0;
+//   s21_create_matrix(A->columns, A->rows, result);
+//   for (int index = 0; index < A->columns; index++) {
+//     for (int row = 0; row < A->rows; row++) {
+//       for (int column = 0; column < A->columns; column++) {
+//         if () {
+//           s21_determinant(A, &res);
+//           result->matrix[row][column] = res;
+//         }
+//       }
+//     }
+//   }
+//   return OK;
+// }
+
+// void s21_cross_off(int index, matrix_t *A) {
+//   matrix_t B;
+//   s21_create_matrix(A->columns - 1, A->rows - 1, &B);
+//   for (int row = 0; row < A->rows; row++) {
+//     for (int column = 0; column < A->columns; column++) {
+//       if (row != index && column != index)
+//         B.matrix[row][column] = A->matrix[row][column];
+//     }
+//   }
 // }
 
 int s21_this_is_null(matrix_t *A) {

@@ -842,7 +842,7 @@ START_TEST(test_s21_mult_matrix2) {
   s21_fill_matrix(&matrix_test_2, src_2);
   s21_fill_matrix(&expect_result, src_res);
   ck_assert_int_eq(s21_mult_matrix(&matrix_test_1, &matrix_test_2, &result),
-                   INCORRECT_MATRIX);
+                   CALCULATION_ERROR);
   s21_remove_matrix(&matrix_test_1);
   s21_remove_matrix(&matrix_test_2);
   s21_remove_matrix(&expect_result);
@@ -911,7 +911,7 @@ START_TEST(test_s21_mult_matrix5) {
   s21_fill_matrix(&matrix_test_2, src_2);
   s21_fill_matrix(&expect_result, src_res);
   ck_assert_int_eq(s21_mult_matrix(&matrix_test_1, &matrix_test_2, &result),
-                   INCORRECT_MATRIX);
+                   CALCULATION_ERROR);
   s21_remove_matrix(&matrix_test_1);
   s21_remove_matrix(&matrix_test_2);
   s21_remove_matrix(&expect_result);
@@ -1028,11 +1028,153 @@ Suite *mult_transpose() {
   return result;
 }
 
+START_TEST(test_s21_determinant) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "1 2 3 4 5 6 7 8 9";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 0, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant1) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "1.22 9.12 4.71 2.01 0.001 5.1 3.5 7.1 6.8";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 61.171861, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant2) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "0 0 0 2.01 0.001 5.1 3.5 7.1 6.8";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 0, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant3) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "0 9.12 4.71 0 0.001 5.1 0 7.1 6.8";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 0, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant4) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 2, columns = 2;
+  char *src_1 = "2 4 6 9";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, -6, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant5) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 2, columns = 2;
+  char *src_1 = "2.325 4.1356 6.6864 6.6864";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, -12.1063958, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant6) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 4, columns = 4;
+  char *src_1 = "4 7 8 8 2 4 0 -1 1 7 -4 1 3 4 1 8";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 789, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant7) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 4, columns = 4;
+  char *src_1 =
+      "4.6432156 7.1355790 8.2668075 8.7422688 2.1790467 4.08956326 0 "
+      "-1.2477996 1.46895357 7.1895326 -4.2565775 1.3674785 3.7446284 "
+      "4.2642367 1.0936941 8.0149754";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 935.8920714, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant8) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 4;
+  char *src_1 =
+      "4.6432156 7.1355790 8.2668075 8.7422688 2.1790467 4.08956326 0 "
+      "-1.2477996 1.46895357 7.1895326 -4.2565775 1.3674785 0";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), CALCULATION_ERROR);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+Suite *determinant() {
+  Suite *result;
+  TCase *tc_s21_determinant;
+
+  result = suite_create("s21_determinant");
+  tc_s21_determinant = tcase_create("s21_determinant");
+
+  tcase_add_test(tc_s21_determinant, test_s21_determinant);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant1);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant2);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant3);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant4);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant5);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant6);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant7);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant8);
+  suite_add_tcase(result, tc_s21_determinant);
+
+  return result;
+}
+
 int main() {
   int failed = 0;
   Suite *result[] = {create_matrix(),  eq_matrix(),   sum_matrix(),
                      sub_matrix(),     mult_number(), mult_matrix(),
-                     mult_transpose(), NULL};
+                     mult_transpose(), determinant(), NULL};
 
   for (int i = 0; result[i] != NULL; i++) {
     SRunner *runner = srunner_create(result[i]);

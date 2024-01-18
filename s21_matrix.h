@@ -34,7 +34,7 @@ int s21_this_is_null(matrix_t *A);
 int s21_row_or_col_err(matrix_t *A);
 int s21_not_same_size(matrix_t *A, matrix_t *B);
 int s21_is_inf_or_nan(matrix_t *A);
-void s21_determinant_copy(matrix_t *A, matrix_t *B);
-int s21_determinant_3(matrix_t *A);
+int s21_search_not_null(matrix_t *A, int count);
+void s21_gaus_str(matrix_t *A, int not_null, int count);
 
 #endif
