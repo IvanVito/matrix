@@ -1170,11 +1170,94 @@ Suite *determinant() {
   return result;
 }
 
+START_TEST(test_s21_calc_complements) {
+  matrix_t matrix_test_1;
+  matrix_t expect_result;
+  matrix_t result;
+  int rows = 3, columns = 3;
+  char *src_1 = "1 2 3 0 4 2 5 2 1";
+  char *src_2 = "0 10 -20 4 -14 8 -8 -2 4";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_create_matrix(rows, columns, &expect_result);
+  s21_create_matrix(rows, columns, &result);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  s21_fill_matrix(&expect_result, src_2);
+  ck_assert_int_eq(s21_calc_complements(&matrix_test_1, &result), OK);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_calc_complements1) {
+  matrix_t matrix_test_1;
+  matrix_t expect_result;
+  matrix_t result;
+  int rows = 2, columns = 2;
+  char *src_1 = "1 2 4 3";
+  char *src_2 = "3 -4 -2 1";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_create_matrix(rows, columns, &expect_result);
+  s21_create_matrix(rows, columns, &result);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  s21_fill_matrix(&expect_result, src_2);
+  ck_assert_int_eq(s21_calc_complements(&matrix_test_1, &result), OK);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
+  s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&expect_result);
+  s21_remove_matrix(&result);
+}
+END_TEST
+
+START_TEST(test_s21_calc_complements2) {
+  matrix_t matrix_test_1;
+  matrix_t expect_result;
+  matrix_t result;
+  int rows = 3, columns = 3;
+  char *src_1 = "1.234 2.464 5.8654 9.142 5.325 0 1.675 3.6778 9.999999";
+  char *src_2 =
+      "53.2499947 -91.4199909 24.7030726 -3.0682294 2.5154538 -0.4112052 "
+      "-31.2332550 53.6214868 -15.9548380";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_create_matrix(rows, columns, &expect_result);
+  s21_create_matrix(rows, columns, &result);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  s21_fill_matrix(&expect_result, src_2);
+  ck_assert_int_eq(s21_calc_complements(&matrix_test_1, &result), OK);
+  s21_print_matrix(&result);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
+  s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&expect_result);
+  s21_remove_matrix(&result);
+}
+END_TEST
+
+Suite *calc_complements() {
+  Suite *result;
+  TCase *tc_s21_calc_complements;
+
+  result = suite_create("s21_calc_complements");
+  tc_s21_calc_complements = tcase_create("s21_calc_complements");
+
+  tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements);
+  tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements1);
+  tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements2);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements3);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements4);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements5);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements6);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements7);
+  // tcase_add_test(tc_s21_calc_complements, test_s21_calc_complements8);
+  suite_add_tcase(result, tc_s21_calc_complements);
+
+  return result;
+}
+
 int main() {
   int failed = 0;
-  Suite *result[] = {create_matrix(),  eq_matrix(),   sum_matrix(),
-                     sub_matrix(),     mult_number(), mult_matrix(),
-                     mult_transpose(), determinant(), NULL};
+  Suite *result[] = {
+      create_matrix(),    eq_matrix(),   sum_matrix(),     sub_matrix(),
+      mult_number(),      mult_matrix(), mult_transpose(), determinant(),
+      calc_complements(), NULL};
 
   for (int i = 0; result[i] != NULL; i++) {
     SRunner *runner = srunner_create(result[i]);
