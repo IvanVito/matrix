@@ -1138,6 +1138,38 @@ START_TEST(test_s21_transpose3) {
 }
 END_TEST
 
+START_TEST(test_s21_transpose4) {
+  matrix_t matrix_test_1;
+  matrix_t result;
+  matrix_test_1.rows = 3;
+  matrix_test_1.rows = 0;
+  result.rows = 3;
+  result.rows = 0;
+  ck_assert_int_eq(s21_transpose(&matrix_test_1, &result), INCORRECT_MATRIX);
+  s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&result);
+}
+END_TEST
+
+START_TEST(test_s21_transpose5) {
+  matrix_t matrix_test_1;
+  matrix_t expect_result;
+  matrix_t result;
+  int rows = 1, columns = 1;
+  char *src_1 = "1.2222221";
+  char *src_res = "1.2222221";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_create_matrix(columns, rows, &expect_result);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  s21_fill_matrix(&expect_result, src_res);
+  ck_assert_int_eq(s21_transpose(&matrix_test_1, &result), OK);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
+  s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&expect_result);
+  s21_remove_matrix(&result);
+}
+END_TEST
+
 Suite *mult_transpose() {
   Suite *result;
   TCase *tc_s21_transpose;
@@ -1149,6 +1181,8 @@ Suite *mult_transpose() {
   tcase_add_test(tc_s21_transpose, test_s21_transpose1);
   tcase_add_test(tc_s21_transpose, test_s21_transpose2);
   tcase_add_test(tc_s21_transpose, test_s21_transpose3);
+  tcase_add_test(tc_s21_transpose, test_s21_transpose4);
+  tcase_add_test(tc_s21_transpose, test_s21_transpose5);
   suite_add_tcase(result, tc_s21_transpose);
 
   return result;
@@ -1288,6 +1322,19 @@ START_TEST(test_s21_determinant9) {
 }
 END_TEST
 
+START_TEST(test_s21_determinant10) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "1 2 3 4 0 6 7 8 0";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, 132, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
 Suite *determinant() {
   Suite *result;
   TCase *tc_s21_determinant;
@@ -1305,6 +1352,7 @@ Suite *determinant() {
   tcase_add_test(tc_s21_determinant, test_s21_determinant7);
   tcase_add_test(tc_s21_determinant, test_s21_determinant8);
   tcase_add_test(tc_s21_determinant, test_s21_determinant9);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant10);
   suite_add_tcase(result, tc_s21_determinant);
 
   return result;

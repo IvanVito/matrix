@@ -98,7 +98,8 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
 }
 
 int s21_transpose(matrix_t *A, matrix_t *result) {
-  s21_create_matrix(A->columns, A->rows, result);
+  if (A == NULL || s21_create_matrix(A->columns, A->rows, result))
+    return INCORRECT_MATRIX;
   for (int row = 0; row < A->rows; row++) {
     for (int column = 0; column < A->columns; column++) {
       result->matrix[column][row] = A->matrix[row][column];
@@ -129,10 +130,6 @@ int s21_determinant(matrix_t *A, double *result) {
     *result =
         A->matrix[0][0] * A->matrix[1][1] - A->matrix[0][1] * A->matrix[1][0];
   }
-  // printf("\n");
-  // s21_print_matrix(&copy_matrix);
-  // printf("\n");
-  // s21_remove_matrix(&copy_matrix);
   return OK;
 }
 
