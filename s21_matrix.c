@@ -112,17 +112,16 @@ int s21_determinant(matrix_t *A, double *result) {
   matrix_t copy_matrix;
   s21_create_matrix(A->rows, A->columns, &copy_matrix);
   s21_copy_matrix(A, &copy_matrix);
+  int ind_not_null = 0;
   *result = 1;
-  int ind_not_null = s21_search_not_null(&copy_matrix, 0);
   if (A->rows != 2) {
     for (int count = 0; (count < (copy_matrix.rows - 1)) && (*result != 0);
          count++) {
-      if (ind_not_null >= 0) {
+      ind_not_null = s21_search_not_null(&copy_matrix, count);
+      if (ind_not_null >= 0)
         s21_gaus_str(&copy_matrix, ind_not_null, count);
-        ind_not_null = s21_search_not_null(&copy_matrix, count + 1);
-      } else {
+      else
         *result = 0;
-      }
     }
     for (int column = 0; column < copy_matrix.columns; column++)
       *result *= copy_matrix.matrix[column][column];
@@ -130,33 +129,35 @@ int s21_determinant(matrix_t *A, double *result) {
     *result =
         A->matrix[0][0] * A->matrix[1][1] - A->matrix[0][1] * A->matrix[1][0];
   }
-  printf("\n");
-  s21_print_matrix(&copy_matrix);
-  printf("\n");
-  s21_remove_matrix(&copy_matrix);
+  // printf("\n");
+  // s21_print_matrix(&copy_matrix);
+  // printf("\n");
+  // s21_remove_matrix(&copy_matrix);
   return OK;
 }
 
 int s21_search_not_null(matrix_t *copy_matrix, int count) {
   int not_null = -1;
-  for (int row = count; (row < copy_matrix->rows) && (not_null < 0); row++)
+  for (int row = count; (row < copy_matrix->rows) && (not_null == -1); row++)
     if (copy_matrix->matrix[row][count]) not_null = row;
+  if ((not_null != count) && (not_null != -1)) {
+    for (int column = count; column < copy_matrix->columns; column++) {
+      int temp = 0;
+      temp = copy_matrix->matrix[count][column];
+      copy_matrix->matrix[count][column] =
+          -copy_matrix->matrix[not_null][column];
+      copy_matrix->matrix[not_null][column] = temp;
+    }
+    not_null = count;
+  }
   return not_null;
 }
 
 void s21_gaus_str(matrix_t *copy_matrix, int not_null, int count) {
-  for (int row = count; row < not_null; row++) {
+  for (int row = count + 1; row < copy_matrix->rows; row++) {
     double divider =
         copy_matrix->matrix[row][count] / copy_matrix->matrix[not_null][count];
-    for (int column = count; column < copy_matrix->columns; column++) {
-      copy_matrix->matrix[row][column] -=
-          copy_matrix->matrix[not_null][column] * divider;
-    }
-  }
-  for (int row = not_null + 1; row < copy_matrix->rows; row++) {
-    double divider =
-        copy_matrix->matrix[row][count] / copy_matrix->matrix[not_null][count];
-    for (int column = count; column < copy_matrix->columns; column++) {
+    for (int column = count + 1; column < copy_matrix->columns; column++) {
       copy_matrix->matrix[row][column] -=
           copy_matrix->matrix[not_null][column] * divider;
     }
@@ -269,18 +270,12 @@ int s21_is_inf_or_nan(matrix_t *A) {
 
 // int main() {
 //   matrix_t matrix_test_1;
-//   matrix_t matrix_test_2;
-//   matrix_t result;
-//   int rows_1 = 2, columns_1 = 1, rows_2 = 1, columns_2 = 0;
-//   matrix_test_1.rows = rows_1;
-//   matrix_test_1.columns = columns_1;
-//   matrix_test_2.rows = rows_2;
-//   matrix_test_2.columns = columns_2;
-//   result.rows = 2;
-//   result.columns = 0;
-//   s21_mult_matrix(&matrix_test_1, &matrix_test_2, &result);
+//   double result = 0;
+//   int rows = 3, columns = 3;
+//   char *src_1 = "0 9.12 4.71 0 0.001 5.1 0 7.1 6.8";
+//   s21_create_matrix(rows, columns, &matrix_test_1);
+//   s21_fill_matrix(&matrix_test_1, src_1);
+//   s21_determinant(&matrix_test_1, &result);
 //   s21_remove_matrix(&matrix_test_1);
-//   s21_remove_matrix(&matrix_test_2);
-//   s21_remove_matrix(&result);
 //   return 0;
 // }
