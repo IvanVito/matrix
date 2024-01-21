@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -std=c11
 OS = $(shell uname)
+NAME = $(shell date)
 
 ifeq ($(OS),Linux)
     det_OS = -lcheck -lrt -lpthread -lsubunit -lm
@@ -43,7 +44,7 @@ rebuild: clean all
 
 push:
 	git add s21_matrix.c s21_matrix.h all_test.c Makefile
-	git commit -m "autocom"
+	git commit -m "$(NAME)"
 	git push origin main
 
 .PHONY: all check test gcov_report clean rebuild
