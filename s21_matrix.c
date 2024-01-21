@@ -164,8 +164,10 @@ void s21_gaus_str(matrix_t *copy_matrix, int not_null, int count) {
 }
 
 int s21_calc_complements(matrix_t *A, matrix_t *result) {
+  if (A == NULL || s21_create_matrix(A->columns, A->rows, result))
+    return INCORRECT_MATRIX;
+  if (A->rows != A->columns) return CALCULATION_ERROR;
   double res = 0;
-  s21_create_matrix(A->columns, A->rows, result);
   matrix_t B;
   for (int row = 0; row < A->rows; row++) {
     for (int column = 0; column < A->columns; column++) {
