@@ -41,4 +41,9 @@ clean:
 
 rebuild: clean all
 
+push:
+	git add s21_matrix.c s21_matrix.h all_test.c Makefile
+	git commit -m "autocom"
+	git push origin main
+
 .PHONY: all check test gcov_report clean rebuild

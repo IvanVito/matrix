@@ -242,6 +242,20 @@ START_TEST(test_s21_eq_matrix8) {
 }
 END_TEST
 
+START_TEST(test_s21_eq_matrix9) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t matrix_test_2;
+  ck_assert_int_eq(s21_eq_matrix(matrix_test_1, &matrix_test_2), FAILURE);
+}
+END_TEST
+
+START_TEST(test_s21_eq_matrix10) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t matrix_test_2;
+  ck_assert_int_eq(s21_eq_matrix(matrix_test_1, &matrix_test_2), FAILURE);
+}
+END_TEST
+
 Suite *eq_matrix() {
   Suite *result;
   TCase *tc_s21_matrix_eq;
@@ -258,6 +272,8 @@ Suite *eq_matrix() {
   tcase_add_test(tc_s21_matrix_eq, test_s21_eq_matrix6);
   tcase_add_test(tc_s21_matrix_eq, test_s21_eq_matrix7);
   tcase_add_test(tc_s21_matrix_eq, test_s21_eq_matrix8);
+  tcase_add_test(tc_s21_matrix_eq, test_s21_eq_matrix9);
+  tcase_add_test(tc_s21_matrix_eq, test_s21_eq_matrix10);
 
   suite_add_tcase(result, tc_s21_matrix_eq);
 
@@ -473,6 +489,24 @@ START_TEST(test_s21_sum_matrix9) {
 }
 END_TEST
 
+START_TEST(test_s21_sum_matrix10) {
+  matrix_t matrix_test_1;
+  matrix_t matrix_test_2;
+  matrix_t *result = NULL;
+  ck_assert_int_eq(s21_sum_matrix(&matrix_test_1, &matrix_test_2, result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix11) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t matrix_test_2;
+  matrix_t result;
+  ck_assert_int_eq(s21_sum_matrix(matrix_test_1, &matrix_test_2, &result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
 Suite *sum_matrix() {
   Suite *result;
   TCase *tc_s21_matrix_sum;
@@ -490,6 +524,8 @@ Suite *sum_matrix() {
   tcase_add_test(tc_s21_matrix_sum, test_s21_sum_matrix7);
   tcase_add_test(tc_s21_matrix_sum, test_s21_sum_matrix8);
   tcase_add_test(tc_s21_matrix_sum, test_s21_sum_matrix9);
+  tcase_add_test(tc_s21_matrix_sum, test_s21_sum_matrix10);
+  tcase_add_test(tc_s21_matrix_sum, test_s21_sum_matrix11);
 
   suite_add_tcase(result, tc_s21_matrix_sum);
 
@@ -681,6 +717,24 @@ START_TEST(test_s21_sub_matrix8) {
 }
 END_TEST
 
+START_TEST(test_s21_sub_matrix9) {
+  matrix_t matrix_test_1;
+  matrix_t matrix_test_2;
+  matrix_t *result = NULL;
+  ck_assert_int_eq(s21_sub_matrix(&matrix_test_1, &matrix_test_2, result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
+START_TEST(test_s21_sub_matrix10) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t matrix_test_2;
+  matrix_t result;
+  ck_assert_int_eq(s21_sub_matrix(matrix_test_1, &matrix_test_2, &result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
 Suite *sub_matrix() {
   Suite *result;
   TCase *tc_s21_matrix_sub;
@@ -697,6 +751,8 @@ Suite *sub_matrix() {
   tcase_add_test(tc_s21_matrix_sub, test_s21_sub_matrix6);
   tcase_add_test(tc_s21_matrix_sub, test_s21_sub_matrix7);
   tcase_add_test(tc_s21_matrix_sub, test_s21_sub_matrix8);
+  tcase_add_test(tc_s21_matrix_sub, test_s21_sub_matrix9);
+  tcase_add_test(tc_s21_matrix_sub, test_s21_sub_matrix10);
 
   suite_add_tcase(result, tc_s21_matrix_sub);
 
@@ -853,6 +909,24 @@ START_TEST(test_s21_mult_number7) {
 }
 END_TEST
 
+START_TEST(test_s21_mult_number8) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t result;
+  double number = 7;
+  ck_assert_int_eq(s21_mult_number(matrix_test_1, number, &result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
+START_TEST(test_s21_mult_number9) {
+  matrix_t matrix_test_1;
+  matrix_t *result = NULL;
+  double number = 7;
+  ck_assert_int_eq(s21_mult_number(&matrix_test_1, number, result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
 Suite *mult_number() {
   Suite *result;
   TCase *tc_s21_mult_number;
@@ -868,6 +942,8 @@ Suite *mult_number() {
   tcase_add_test(tc_s21_mult_number, test_s21_mult_number5);
   tcase_add_test(tc_s21_mult_number, test_s21_mult_number6);
   tcase_add_test(tc_s21_mult_number, test_s21_mult_number7);
+  tcase_add_test(tc_s21_mult_number, test_s21_mult_number8);
+  tcase_add_test(tc_s21_mult_number, test_s21_mult_number9);
   suite_add_tcase(result, tc_s21_mult_number);
 
   return result;
@@ -1043,6 +1119,24 @@ START_TEST(test_s21_mult_matrix6) {
 }
 END_TEST
 
+START_TEST(test_s21_mult_matrix7) {
+  matrix_t matrix_test_1;
+  matrix_t matrix_test_2;
+  matrix_t *result = NULL;
+  ck_assert_int_eq(s21_mult_matrix(&matrix_test_1, &matrix_test_2, result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
+START_TEST(test_s21_mult_matrix8) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t matrix_test_2;
+  matrix_t result;
+  ck_assert_int_eq(s21_mult_matrix(matrix_test_1, &matrix_test_2, &result),
+                   INCORRECT_MATRIX);
+}
+END_TEST
+
 Suite *mult_matrix() {
   Suite *result;
   TCase *tc_s21_mult_matrix;
@@ -1057,6 +1151,8 @@ Suite *mult_matrix() {
   tcase_add_test(tc_s21_mult_matrix, test_s21_mult_matrix4);
   tcase_add_test(tc_s21_mult_matrix, test_s21_mult_matrix5);
   tcase_add_test(tc_s21_mult_matrix, test_s21_mult_matrix6);
+  tcase_add_test(tc_s21_mult_matrix, test_s21_mult_matrix7);
+  tcase_add_test(tc_s21_mult_matrix, test_s21_mult_matrix8);
   suite_add_tcase(result, tc_s21_mult_matrix);
 
   return result;
@@ -1170,6 +1266,21 @@ START_TEST(test_s21_transpose5) {
 }
 END_TEST
 
+START_TEST(test_s21_transpose6) {
+  matrix_t *matrix_test_1 = NULL;
+  matrix_t result;
+  ck_assert_int_eq(s21_transpose(matrix_test_1, &result), INCORRECT_MATRIX);
+  s21_remove_matrix(matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_transpose7) {
+  matrix_t matrix_test_1;
+  matrix_t *result = NULL;
+  ck_assert_int_eq(s21_transpose(&matrix_test_1, result), INCORRECT_MATRIX);
+}
+END_TEST
+
 Suite *mult_transpose() {
   Suite *result;
   TCase *tc_s21_transpose;
@@ -1183,6 +1294,8 @@ Suite *mult_transpose() {
   tcase_add_test(tc_s21_transpose, test_s21_transpose3);
   tcase_add_test(tc_s21_transpose, test_s21_transpose4);
   tcase_add_test(tc_s21_transpose, test_s21_transpose5);
+  tcase_add_test(tc_s21_transpose, test_s21_transpose6);
+  tcase_add_test(tc_s21_transpose, test_s21_transpose7);
   suite_add_tcase(result, tc_s21_transpose);
 
   return result;
@@ -1335,6 +1448,23 @@ START_TEST(test_s21_determinant10) {
 }
 END_TEST
 
+START_TEST(test_s21_determinant11) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  matrix_test_1.rows = 3, matrix_test_1.columns = 0;
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), INCORRECT_MATRIX);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
+START_TEST(test_s21_determinant12) {
+  matrix_t *matrix_test_1 = NULL;
+  double result = 0;
+  ck_assert_int_eq(s21_determinant(matrix_test_1, &result), INCORRECT_MATRIX);
+  s21_remove_matrix(matrix_test_1);
+}
+END_TEST
+
 Suite *determinant() {
   Suite *result;
   TCase *tc_s21_determinant;
@@ -1353,6 +1483,8 @@ Suite *determinant() {
   tcase_add_test(tc_s21_determinant, test_s21_determinant8);
   tcase_add_test(tc_s21_determinant, test_s21_determinant9);
   tcase_add_test(tc_s21_determinant, test_s21_determinant10);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant11);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant12);
   suite_add_tcase(result, tc_s21_determinant);
 
   return result;

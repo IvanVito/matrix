@@ -109,6 +109,7 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
 }
 
 int s21_determinant(matrix_t *A, double *result) {
+  if (A == NULL || A->rows <= 0 || A->columns <= 0) return INCORRECT_MATRIX;
   if (A->rows != A->columns) return CALCULATION_ERROR;
   matrix_t copy_matrix;
   s21_create_matrix(A->rows, A->columns, &copy_matrix);
@@ -130,6 +131,7 @@ int s21_determinant(matrix_t *A, double *result) {
     *result =
         A->matrix[0][0] * A->matrix[1][1] - A->matrix[0][1] * A->matrix[1][0];
   }
+  s21_remove_matrix(&copy_matrix);
   return OK;
 }
 
@@ -266,13 +268,10 @@ int s21_is_inf_or_nan(matrix_t *A) {
 }
 
 // int main() {
-//   matrix_t matrix_test_1;
-//   double result = 0;
-//   int rows = 3, columns = 3;
-//   char *src_1 = "0 9.12 4.71 0 0.001 5.1 0 7.1 6.8";
-//   s21_create_matrix(rows, columns, &matrix_test_1);
-//   s21_fill_matrix(&matrix_test_1, src_1);
-//   s21_determinant(&matrix_test_1, &result);
-//   s21_remove_matrix(&matrix_test_1);
+//   matrix_t *matrix_test_1 = NULL;
+//   matrix_t result;
+//   s21_transpose(matrix_test_1, &result);
+//   s21_remove_matrix(matrix_test_1);
+//   s21_remove_matrix(&result);
 //   return 0;
 // }
