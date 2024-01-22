@@ -1,4 +1,5 @@
 #include "s21_matrix.h"
+#include "s21_matrix_extend.h"
 
 START_TEST(test_s21_create_matrix) {
   matrix_t matrix_test;
@@ -1786,10 +1787,13 @@ Suite *inverse() {
 
   return result;
 }
-                 
+
 int main() {
   int failed = 0;
-  Suite *result[] = {  create_matrix(), eq_matrix(), sum_matrix(), sub_matrix(), mult_number(), mult_matrix(),mult_transpose(), determinant(),calc_complements(), inverse(),  NULL};
+  Suite *result[] = {create_matrix(),  eq_matrix(),   sum_matrix(),
+                     sub_matrix(),     mult_number(), mult_matrix(),
+                     mult_transpose(), determinant(), calc_complements(),
+                     inverse(),        NULL};
 
   for (int i = 0; result[i] != NULL; i++) {
     SRunner *runner = srunner_create(result[i]);
