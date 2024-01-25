@@ -1469,6 +1469,19 @@ START_TEST(test_s21_determinant13) {
 }
 END_TEST
 
+START_TEST(test_s21_determinant14) {
+  matrix_t matrix_test_1;
+  double result = 0;
+  int rows = 3, columns = 3;
+  char *src_1 = "2 4 6 7 0 9 0 1 2";
+  s21_create_matrix(rows, columns, &matrix_test_1);
+  s21_fill_matrix(&matrix_test_1, src_1);
+  ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
+  ck_assert_double_eq_tol(result, -31, 1e-7);
+  s21_remove_matrix(&matrix_test_1);
+}
+END_TEST
+
 Suite *determinant() {
   Suite *result;
   TCase *tc_s21_determinant;
@@ -1490,6 +1503,7 @@ Suite *determinant() {
   tcase_add_test(tc_s21_determinant, test_s21_determinant11);
   tcase_add_test(tc_s21_determinant, test_s21_determinant12);
   tcase_add_test(tc_s21_determinant, test_s21_determinant13);
+  tcase_add_test(tc_s21_determinant, test_s21_determinant14);
   suite_add_tcase(result, tc_s21_determinant);
 
   return result;
