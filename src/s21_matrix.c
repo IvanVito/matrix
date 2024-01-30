@@ -141,18 +141,21 @@ int s21_determinant(matrix_t *A, double *result) {
 int s21_calc_complements(matrix_t *A, matrix_t *result) {
   if (A == NULL || s21_create_matrix(A->columns, A->rows, result))
     return INCORRECT_MATRIX;
-  if (A->rows != A->columns || (A->rows == 1 && A->columns == 1))
-    return CALCULATION_ERROR;
-  double res = 0;
-  matrix_t B;
-  for (int row = 0; row < A->rows; row++) {
-    for (int column = 0; column < A->columns; column++) {
-      s21_create_matrix(A->columns - 1, A->rows - 1, &B);
-      s21_cross_off(row, column, A, &B);
-      s21_determinant(&B, &res);
-      result->matrix[row][column] = pow(-1, row + column) * res;
-      s21_remove_matrix(&B);
+  if (A->rows != A->columns) return CALCULATION_ERROR;
+  if (A->rows != 1) {
+    double res = 0;
+    matrix_t B;
+    for (int row = 0; row < A->rows; row++) {
+      for (int column = 0; column < A->columns; column++) {
+        s21_create_matrix(A->columns - 1, A->rows - 1, &B);
+        s21_cross_off(row, column, A, &B);
+        s21_determinant(&B, &res);
+        result->matrix[row][column] = pow(-1, row + column) * res;
+        s21_remove_matrix(&B);
+      }
     }
+  } else {
+    result->matrix[0][0] = -A->matrix[0][0];
   }
   return OK;
 }

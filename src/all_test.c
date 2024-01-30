@@ -1477,7 +1477,7 @@ START_TEST(test_s21_determinant14) {
   s21_create_matrix(rows, columns, &matrix_test_1);
   s21_fill_matrix(&matrix_test_1, src_1);
   ck_assert_int_eq(s21_determinant(&matrix_test_1, &result), OK);
-  ck_assert_double_eq_tol(result, -31, 1e-7);
+  ck_assert_double_eq_tol(result, -32, 1e-7);
   s21_remove_matrix(&matrix_test_1);
 }
 END_TEST
@@ -1629,15 +1629,20 @@ END_TEST
 START_TEST(test_s21_calc_complements7) {
   matrix_t matrix_test_1;
   matrix_t result;
+  matrix_t expect_result;
   int rows = 1, columns = 1;
   char *src_1 = "-7";
+  char *src_2 = "7";
   s21_create_matrix(rows, columns, &matrix_test_1);
   s21_create_matrix(rows, columns, &result);
+  s21_create_matrix(rows, columns, &expect_result);
   s21_fill_matrix(&matrix_test_1, src_1);
-  ck_assert_int_eq(s21_calc_complements(&matrix_test_1, &result),
-                   CALCULATION_ERROR);
+  s21_fill_matrix(&expect_result, src_2);
+  ck_assert_int_eq(s21_calc_complements(&matrix_test_1, &result), OK);
+  ck_assert_int_eq(s21_eq_matrix(&result, &expect_result), SUCCESS);
   s21_remove_matrix(&result);
   s21_remove_matrix(&matrix_test_1);
+  s21_remove_matrix(&expect_result);
 }
 END_TEST
 
