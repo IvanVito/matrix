@@ -44,10 +44,10 @@ void s21_cross_off(int index_row, int index_column, matrix_t *A, matrix_t *B) {
   }
 }
 
-void s21_copy_matrix(matrix_t *A, matrix_t *B) {
-  for (int row = 0; row < A->rows; row++) {
-    for (int column = 0; column < A->columns; column++) {
-      B->matrix[row][column] = A->matrix[row][column];
+void s21_copy_matrix(matrix_t A, matrix_t *B) {
+  for (int row = 0; row < A.rows; row++) {
+    for (int column = 0; column < A.columns; column++) {
+      B->matrix[row][column] = A.matrix[row][column];
     }
   }
 }
@@ -80,12 +80,3 @@ int s21_is_inf_or_nan(matrix_t *A) {
   }
   return res;
 }
-
-// void s21_print_matrix(matrix_t *A) {
-//   for (int row = 0; row < A->rows; row++) {
-//     for (int column = 0; column < A->columns; column++) {
-//       printf("%0.7lf ", A->matrix[row][column]);
-//     }
-//     printf("\n");
-//   }
-// }

@@ -116,7 +116,7 @@ int s21_determinant(matrix_t *A, double *result) {
   if (A->rows != A->columns) return CALCULATION_ERROR;
   matrix_t copy_matrix;
   s21_create_matrix(A->rows, A->columns, &copy_matrix);
-  s21_copy_matrix(A, &copy_matrix);
+  s21_copy_matrix(*A, &copy_matrix);
   int ind_not_null = 0;
   *result = 1;
   if (A->rows != 2) {
@@ -143,8 +143,8 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
     return INCORRECT_MATRIX;
   if (A->rows != A->columns) return CALCULATION_ERROR;
   if (A->rows != 1) {
-    double res = 0;
     matrix_t B;
+    double res = 0;
     for (int row = 0; row < A->rows; row++) {
       for (int column = 0; column < A->columns; column++) {
         s21_create_matrix(A->columns - 1, A->rows - 1, &B);
@@ -161,8 +161,7 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 }
 
 int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
-  if (A == NULL || s21_create_matrix(A->columns, A->rows, result))
-    return INCORRECT_MATRIX;
+  if (A == NULL || A->rows < 1 || A->columns < 1) return INCORRECT_MATRIX;
   if (A->rows != A->columns) return CALCULATION_ERROR;
   matrix_t ally, transp;
   int res = OK;
@@ -170,16 +169,14 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   s21_determinant(A, &deter);
   if (deter != 0) {
     deter_re = 1 / deter;
-    s21_create_matrix(A->columns, A->rows, result);
     if (A->rows != 1) {
-      s21_create_matrix(A->columns, A->rows, &ally);
       s21_calc_complements(A, &ally);
-      s21_create_matrix(A->columns, A->rows, &transp);
       s21_transpose(&ally, &transp);
       s21_mult_number(&transp, deter_re, result);
       s21_remove_matrix(&ally);
       s21_remove_matrix(&transp);
     } else {
+      s21_create_matrix(1, 1, result);
       result->matrix[0][0] = deter_re;
     }
   } else {
@@ -187,15 +184,3 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   }
   return res;
 }
-
-// int main() {
-//   matrix_t matrix_test_1;
-//   matrix_t result;
-//   int rows = 1, columns = 1;
-//   char *src_1 = "1 2 3 4 5 6 7 8 9";
-//   s21_create_matrix(rows, columns, &matrix_test_1);
-//   s21_fill_matrix(&matrix_test_1, src_1);
-//   s21_inverse_matrix(&matrix_test_1, &result);
-//   s21_remove_matrix(&matrix_test_1);
-//   return 0;
-// }
